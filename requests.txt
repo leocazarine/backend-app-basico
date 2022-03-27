@@ -1,0 +1,29 @@
+-> Front (Básica) -> Back (Básica):
+[POST] consent: Cria um novo consentimento
+
+[GET] consents: Lista todos os consentimentos de um usuário no banco
+
+[DELETE] consent/{consentID}: Apaga um consetimento do banco
+
+
+-> Back (Inovadora) -> Back (Básica):
+[GET] get_conta(id, ag, cc): retorna um JSON dessa forma:
+{
+    "id_banco": "567",
+    "cpf_usuario": "1000",
+    "agencia": "301",
+    "cc": "456",
+    "saldo_cc": "100",
+    "saldo_pp": "5000"
+}
+
+[   POST] creates_new_consent(nome, cpf): Chama a aplicação básica para criar um novo consentimento,
+chamada ao acionamento da rota.
+
+[GET] validate_consent(idBanco, cpf): compara se um determinado consentimento guardado
+em nosso DB ainda está válido no banco financeiro.
+Duas verificações são feitas: STATUS e depois data (entre data de início e fim)
+No final retornamos um booleno para a aplicação inovadora.
+
+[GET] gerenciar_consentimento(cpf): Só redireciona para o frontend da básica para gerenciar os
+consentimentos.
