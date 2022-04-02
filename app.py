@@ -4,7 +4,9 @@ from flask import Flask, request, redirect, jsonify
 from flask_restful import Api
 from flask_cors import CORS, cross_origin
 
+import json
 import requests
+import urllib
 from requests.structures import CaseInsensitiveDict
 
 app = Flask(__name__)
@@ -19,11 +21,20 @@ api = Api(app)
 @app.route("/consent", methods=['POST'])
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def criar_consentimento():
-    request_form = request.form
+    # Postman
+    # request_form = request.form
+
+    # Frontend
+    request_form = request.get_json()
 
     nome = request_form["nome"]
     cpf = request_form["cpf"]
-
+    print(nome)
+    print(cpf)
+    instituicao = request_form["instituicao"]
+    print(instituicao)
+    
+    return jsonify({"redirect_url": "https://mango-mockbank.herokuapp.com/auth/auth/?response_type=token&only_one_client_in_database=True/"}), 200, {'ContentType':'application/json'}
     # TODO Call mock bank
 
     headers = {
@@ -56,7 +67,7 @@ def criar_consentimento():
         'resposta2': response.json()
     })
 
-    redirect("https://mango-mockbank.herokuapp.com/auth/auth/?response_type=token&only_one_client_in_database=True/  ")
+    redirect("https://mango-mockbank.herokuapp.com/auth/auth/?response_type=token&only_one_client_in_database=True/")
 
     return response
 
