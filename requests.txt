@@ -17,8 +17,10 @@
     "saldo_pp": "5000"
 }
 
+xxxxxxxxxxxxxxxxxxxxxxxxx
 [POST] creates_new_consent(nome, cpf): Chama a aplicação básica para criar um novo consentimento,
 chamada ao acionamento da rota.
+xxxxxxxxxxxxxxxxxxxxxxxxx
 
 [GET] validate_consent(idBanco, cpf): compara se um determinado consentimento guardado
 em nosso DB ainda está válido no banco financeiro.
