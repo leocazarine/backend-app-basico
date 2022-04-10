@@ -16,7 +16,8 @@ api = Api(app)
 # Front -> Back
 
 
-@app.route("/consent", methods=['POST'])
+# @app.route("/consent", methods=['POST'])
+@app.route("/create_consent", methods=['POST'])
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def criar_consentimento():
     # Postman
@@ -69,18 +70,60 @@ def teste():
     return "sucesso", 200
 
 
-@app.route("/consents", methods=['GET'])
-# @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+@app.route("/get_consent", methods=['POST'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def lista_consentimentos():
-    variavel = [1, 2, 3]
-    return variavel, 200
+    request_form = request.get_json()
+    print(request_form)
+
+    cpf = request_form["cpf"]
+
+    # Mockbank
+    headers = {
+        'Content-Type': 'application/json',
+    }
+
+    json_data = {
+        'data': {
+            'user_cpf': cpf,
+            'only_one_client_in_database': 'True',
+        },
+    }
+
+    response = requests.get('https://mango-mockbank.herokuapp.com/auth/consents/consents/', headers=headers, json=json_data)
+    response_dict = response.json()
+    print(response_dict)
+
+    return response_dict, 200, {'ContentType':'application/json'}
 
 
-@app.route("/consents/<consentID>", methods=['DELETE'])
-# @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
-def deletar_consentimento(consentID):
-    consentID
-    return consentID, 200
+@app.route("/delete_consent", methods=['POST']) # TODO verificar se o método seria um get
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+def deletar_consentimento():
+    request_form = request.get_json()
+    print(request_form)
+
+    cpf = request_form["cpf"] # 90841038074
+    # token = request_form["token"] # JcGMN50CcdDmMxVoFUkFlhucGgdtJdBJkzb6ua2sum
+    token = 'Bearer pVfjCd163h9xj3pYZ0Uj7v6LSbVOpXDke13RnPilDC'
+
+    headers = {
+        'Authorization': token,
+        'Content-Type': 'application/json',
+    }
+
+    json_data = {
+        'data': {
+            'user_cpf': cpf,
+            'only_one_client_in_database': 'True',
+        },
+    }
+
+    response = requests.delete('https://mango-mockbank.herokuapp.com/auth/consents/consents/', headers=headers, json=json_data)
+    print("DELETADO")
+    print(response)
+
+    return "deletado", 200
 
 #######################################################################
 # Back -> Back
