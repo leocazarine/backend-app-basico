@@ -104,20 +104,20 @@ def deletar_consentimento():
     print(request_form)
 
     cpf = request_form["cpf"] # 90841038074
-    # token = request_form["token"] # JcGMN50CcdDmMxVoFUkFlhucGgdtJdBJkzb6ua2sum
-    token = 'Bearer pVfjCd163h9xj3pYZ0Uj7v6LSbVOpXDke13RnPilDC'
+    token = request_form["token"] # 4bELgfHogA7TzfgS7c78jSYI9kxQx6F69IijXX8Vq9
 
     headers = {
-        'Authorization': token,
+        'Authorization': f'Bearer {token}',
         'Content-Type': 'application/json',
     }
 
     json_data = {
         'data': {
-            'user_cpf': cpf,
+            'user_cpf': str(cpf),
             'only_one_client_in_database': 'True',
         },
     }
+    print(json_data)
 
     response = requests.delete('https://mango-mockbank.herokuapp.com/auth/consents/consents/', headers=headers, json=json_data)
     print("DELETADO")
