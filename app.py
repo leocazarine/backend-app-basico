@@ -136,25 +136,7 @@ def get_conta():
     request_json = request.get_json()
     # Frontend
     # request_form = request.get_json()
-    token = request_json["token"]
-
-    headers = {
-        'Authorization': f'Bearer {token}',
-    }
-
-    response = requests.get('https://mango-mockbank.herokuapp.com/accounts/balances', headers=headers)
-    print('response getconta',response.json())
-    return response.json(), 200
-
-
-@app.route("/validate_consent", methods=['GET'])
-@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
-def validate_consent():
-    # Postman
-    request_form = request.form
-    # Frontend
-    # request_form = request.get_json()
-    cpf = request_form["cpf"]
+    cpf = request_json["cpf"]
 
     # Mockbank
     headers = {
@@ -174,10 +156,17 @@ def validate_consent():
     status = response_dict['data']['status']
     expiration_date_time = datetime.strptime(response_dict['data']['expirationDateTime'], '%Y-%m-%dT%H:%M:%SZ')
 
-    if status == "AUTHORISED" and expiration_date_time > datetime.now():
-        return "True", 200
+    if status == "AUTHORISED" and expiration_date_time > datetime.now():        
+        token = request_json["token"]
+        headers = {
+            'Authorization': f'Bearer {token}',
+        }
+
+        response = requests.get('https://mango-mockbank.herokuapp.com/accounts/balances', headers=headers)
+        print('response getconta',response.json())
+        return response.json(), 200
     else:
-        return "False", 200
+        return {"mensagem": "TOKEN_NOT_AUTHORIZED"}, 200
 
 
 if __name__ == "__main__":
