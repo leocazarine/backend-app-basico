@@ -104,10 +104,10 @@ def deletar_consentimento():
     print(request_form)
 
     cpf = request_form["cpf"] # 90841038074
-    token = request_form["token"] # 4bELgfHogA7TzfgS7c78jSYI9kxQx6F69IijXX8Vq9
+    # token = request_form["token"] # 4bELgfHogA7TzfgS7c78jSYI9kxQx6F69IijXX8Vq9
 
     headers = {
-        'Authorization': f'Bearer {token}',
+        # 'Authorization': f'Bearer {token}',
         'Content-Type': 'application/json',
     }
 
@@ -137,6 +137,7 @@ def get_conta():
     # Frontend
     # request_form = request.get_json()
     cpf = request_json["cpf"]
+    print ("cpf: ", cpf)
 
     # Mockbank
     headers = {
@@ -151,7 +152,8 @@ def get_conta():
     }
 
     response = requests.get('https://mango-mockbank.herokuapp.com/auth/consents/consents/', headers=headers, json=json_data)
-
+    print ("validou token")
+    print (response.json())
     response_dict = response.json()
     status = response_dict['data']['status']
     expiration_date_time = datetime.strptime(response_dict['data']['expirationDateTime'], '%Y-%m-%dT%H:%M:%SZ')
@@ -161,9 +163,10 @@ def get_conta():
         headers = {
             'Authorization': f'Bearer {token}',
         }
-
+        print ("vai get conta")
         response = requests.get('https://mango-mockbank.herokuapp.com/accounts/balances', headers=headers)
         print('response getconta',response.json())
+
         return response.json(), 200
     else:
         return {"mensagem": "TOKEN_NOT_AUTHORIZED"}, 200
