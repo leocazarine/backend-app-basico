@@ -133,17 +133,17 @@ def deletar_consentimento():
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def get_conta():
     # Postman
-    request_form = request.form
+    request_json = request.get_json()
     # Frontend
     # request_form = request.get_json()
-    token = request_form["token"]
+    token = request_json["token"]
 
     headers = {
         'Authorization': f'Bearer {token}',
     }
 
     response = requests.get('https://mango-mockbank.herokuapp.com/accounts/balances', headers=headers)
-
+    print('response getconta',response.json())
     return response.json(), 200
 
 
